@@ -8,7 +8,9 @@ class YarnPluginPackageAudit {
   private report: Report | null;
 
   constructor() {
+    console.log("1");
     this.report = null;
+    console.log("2");
   }
 
   async reduceDependency(
