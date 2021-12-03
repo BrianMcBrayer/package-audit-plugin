@@ -46,8 +46,9 @@ var plugin = (() => {
       this.report = extra.resolveOptions.report;
     }
     async wrapNetworkRequest(executor, {target}) {
+      var _a;
       const url = typeof target === `string` ? new import_url.URL(target) : target;
-      this.report.reportInfo(null, `YNX000: fetching from ${url.href}`);
+      (_a = this.report) == null ? void 0 : _a.reportInfo(null, `YNX000: fetching from ${url.href}`);
       return await executor();
     }
   };

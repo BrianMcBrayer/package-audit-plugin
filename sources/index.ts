@@ -5,7 +5,11 @@ import {URL} from 'url';
 // import {WrapNetworkRequestInfo} from "@yarnpkg/core";
 
 class YarnPluginPackageAudit {
-  private report: Report | null = null;
+  private report: Report | null;
+
+  constructor() {
+    this.report = null;
+  }
 
   async reduceDependency(
     _dependency: Descriptor,
@@ -23,7 +27,7 @@ class YarnPluginPackageAudit {
   ) {
     const url = typeof target === `string` ? new URL(target) : target;
 
-    this.report.reportInfo(null, `YNX000: fetching from ${url.href}`);
+    this.report?.reportInfo(null, `YNX000: fetching from ${url.href}`);
 
     return await executor();
   }
