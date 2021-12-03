@@ -40,9 +40,9 @@ var plugin = (() => {
   var import_url = __toModule(__require("url"));
   var YarnPluginPackageAudit = class {
     constructor() {
-      console.log("1");
       this.report = null;
-      console.log("2");
+      this.reduceDependency = this.reduceDependency.bind(this);
+      this.wrapNetworkRequest = this.wrapNetworkRequest.bind(this);
     }
     async reduceDependency(_dependency, _project, _locator, _initialDependency, extra) {
       this.report = extra.resolveOptions.report;

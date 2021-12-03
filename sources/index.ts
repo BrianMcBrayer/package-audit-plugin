@@ -5,12 +5,11 @@ import {URL} from 'url';
 // import {WrapNetworkRequestInfo} from "@yarnpkg/core";
 
 class YarnPluginPackageAudit {
-  private report: Report | null;
+  private report: Report | null = null;
 
   constructor() {
-    console.log("1");
-    this.report = null;
-    console.log("2");
+    this.reduceDependency = this.reduceDependency.bind(this);
+    this.wrapNetworkRequest = this.wrapNetworkRequest.bind(this);
   }
 
   async reduceDependency(
