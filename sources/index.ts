@@ -5,7 +5,7 @@ import {URL} from 'url';
 // import {WrapNetworkRequestInfo} from "@yarnpkg/core";
 
 class YarnPluginPackageAudit {
-  private report: Report | null;
+  private report: Report | null = null;
 
   async reduceDependency(
     _dependency: Descriptor,

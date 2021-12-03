@@ -39,6 +39,9 @@ var plugin = (() => {
   });
   var import_url = __toModule(__require("url"));
   var YarnPluginPackageAudit = class {
+    constructor() {
+      this.report = null;
+    }
     async reduceDependency(_dependency, _project, _locator, _initialDependency, extra) {
       this.report = extra.resolveOptions.report;
     }
