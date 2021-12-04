@@ -3,67 +3,7 @@
 module.exports = {
 name: "@yarnpkg/plugin-package-audit",
 factory: function (require) {
-var plugin = (() => {
-  var __create = Object.create;
-  var __defProp = Object.defineProperty;
-  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-  var __getOwnPropNames = Object.getOwnPropertyNames;
-  var __getProtoOf = Object.getPrototypeOf;
-  var __hasOwnProp = Object.prototype.hasOwnProperty;
-  var __markAsModule = (target) => __defProp(target, "__esModule", {value: true});
-  var __require = (x) => {
-    if (typeof require !== "undefined")
-      return require(x);
-    throw new Error('Dynamic require of "' + x + '" is not supported');
-  };
-  var __export = (target, all) => {
-    for (var name in all)
-      __defProp(target, name, {get: all[name], enumerable: true});
-  };
-  var __reExport = (target, module, desc) => {
-    if (module && typeof module === "object" || typeof module === "function") {
-      for (let key of __getOwnPropNames(module))
-        if (!__hasOwnProp.call(target, key) && key !== "default")
-          __defProp(target, key, {get: () => module[key], enumerable: !(desc = __getOwnPropDesc(module, key)) || desc.enumerable});
-    }
-    return target;
-  };
-  var __toModule = (module) => {
-    return __reExport(__markAsModule(__defProp(module != null ? __create(__getProtoOf(module)) : {}, "default", module && module.__esModule && "default" in module ? {get: () => module.default, enumerable: true} : {value: module, enumerable: true})), module);
-  };
-
-  // pnp:/mnt/c/code/package-audit-plugin/sources/index.ts
-  var sources_exports = {};
-  __export(sources_exports, {
-    default: () => sources_default
-  });
-  var import_url = __toModule(__require("url"));
-  var YarnPluginPackageAudit = class {
-    constructor() {
-      this.report = null;
-      this.reduceDependency = this.reduceDependency.bind(this);
-      this.wrapNetworkRequest = this.wrapNetworkRequest.bind(this);
-    }
-    async reduceDependency(_dependency, _project, _locator, _initialDependency, extra) {
-      this.report = extra.resolveOptions.report;
-    }
-    async wrapNetworkRequest(executor, {target}) {
-      var _a;
-      const url = typeof target === `string` ? new import_url.URL(target) : target;
-      (_a = this.report) == null ? void 0 : _a.reportInfo(null, `YNX000: fetching from ${url.href}`);
-      return await executor();
-    }
-  };
-  var audit = new YarnPluginPackageAudit();
-  var plugin = {
-    hooks: {
-      wrapNetworkRequest: audit.wrapNetworkRequest,
-      reduceDependency: audit.reduceDependency
-    }
-  };
-  var sources_default = plugin;
-  return sources_exports;
-})();
+var plugin=(()=>{var w=Object.create,o=Object.defineProperty;var c=Object.getOwnPropertyDescriptor;var f=Object.getOwnPropertyNames;var d=Object.getPrototypeOf,g=Object.prototype.hasOwnProperty;var h=t=>o(t,"__esModule",{value:!0});var n=t=>{if(typeof require!="undefined")return require(t);throw new Error('Dynamic require of "'+t+'" is not supported')};var k=(t,e)=>{for(var r in e)o(t,r,{get:e[r],enumerable:!0})},m=(t,e,r)=>{if(e&&typeof e=="object"||typeof e=="function")for(let s of f(e))!g.call(t,s)&&s!=="default"&&o(t,s,{get:()=>e[s],enumerable:!(r=c(e,s))||r.enumerable});return t},a=t=>m(h(o(t!=null?w(d(t)):{},"default",t&&t.__esModule&&"default"in t?{get:()=>t.default,enumerable:!0}:{value:t,enumerable:!0})),t);var I={};k(I,{default:()=>q});var l=a(n("@yarnpkg/core")),i=a(n("url")),p=class{constructor(){this.networkRequests=[];this.afterAllInstalled=this.afterAllInstalled.bind(this),this.wrapNetworkRequest=this.wrapNetworkRequest.bind(this)}afterAllInstalled(e,r){for(let s of this.networkRequests)r.report.reportInfo(l.MessageName.FETCH_NOT_CACHED,`fetched from ${s}`)}async wrapNetworkRequest(e,r){return async()=>{let s=typeof r.target=="string"?new i.URL(r.target):r.target;return this.networkRequests.push(s.href),await e()}}},u=new p,R={hooks:{wrapNetworkRequest:u.wrapNetworkRequest,afterAllInstalled:u.afterAllInstalled}},q=R;return I;})();
 return plugin;
 }
 };

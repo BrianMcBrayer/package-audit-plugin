@@ -1,36 +1,40 @@
-import {Descriptor, Locator, Plugin, Project, Report, ResolveOptions, Resolver} from '@yarnpkg/core';
-import {URL} from 'url';
-
-// change this when yarn is released
-// import {WrapNetworkRequestInfo} from "@yarnpkg/core";
+import {
+  Plugin,
+  Project,
+  MessageName,
+} from "@yarnpkg/core";
+import { InstallOptions } from "@yarnpkg/core/lib/Project";
+import { URL } from "url";
 
 class YarnPluginPackageAudit {
-  private report: Report | null = null;
+  private networkRequests: string[] = [];
 
   constructor() {
-    this.reduceDependency = this.reduceDependency.bind(this);
+    this.afterAllInstalled = this.afterAllInstalled.bind(this);
     this.wrapNetworkRequest = this.wrapNetworkRequest.bind(this);
   }
 
-  async reduceDependency(
-    _dependency: Descriptor,
-    _project: Project,
-    _locator: Locator,
-    _initialDependency: Descriptor,
-    extra: { resolver: Resolver; resolveOptions: ResolveOptions }
-  ) {
-    this.report = extra.resolveOptions.report;
+  afterAllInstalled(_: Project, options: InstallOptions) {
+    for (const downloadedPackage of this.networkRequests) {
+      options.report.reportInfo(
+        MessageName.FETCH_NOT_CACHED,
+        `fetched from ${downloadedPackage}`
+      );
+    }
   }
 
   async wrapNetworkRequest(
     executor: () => Promise<any>,
-    { target }: { target: string | URL }
+    extra: any
   ) {
-    const url = typeof target === `string` ? new URL(target) : target;
+    return async () => {
+      const url =
+        typeof extra.target === `string` ? new URL(extra.target) : extra.target;
 
-    this.report?.reportInfo(null, `YNX000: fetching from ${url.href}`);
+      this.networkRequests.push(url.href);
 
-    return await executor();
+      return await executor();
+    };
   }
 }
 
@@ -39,7 +43,7 @@ const audit = new YarnPluginPackageAudit();
 const plugin: Plugin = {
   hooks: {
     wrapNetworkRequest: audit.wrapNetworkRequest,
-    reduceDependency: audit.reduceDependency
+    afterAllInstalled: audit.afterAllInstalled
   },
 };
 
